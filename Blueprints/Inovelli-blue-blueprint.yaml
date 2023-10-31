@@ -1,0 +1,229 @@
+blueprint:
+  name: "Inovelli Blue Light and Fan Switches (ZHA)"
+  description: Create automations for the Inovelli Blue switches via ZHA.
+  domain: automation
+  input:
+    inovelli_switch:
+      name: Inovelli Blue Switches
+      description: "List of available Inovelli Blue switches."
+      selector:
+        device:
+          filter:
+          # Support for Inovelli Blue VZM31-SN Light Switch
+            - integration: zha
+              manufacturer: Inovelli
+              model: VZM31-SN
+          # Support for Inovelli Blue VZM35-SN Fan Switch
+            - integration: zha
+              manufacturer: Inovelli
+              model: VZM35-SN
+    ## Pressed Once
+    button_1:
+      name: Down paddle pressed
+      description: "Action to run when down paddle is pressed once."
+      default: []
+      selector:
+        action:
+    button_2:
+      name: Up paddle pressed
+      description: "Action to run when up paddle is pressed once."
+      default: []
+      selector:
+        action:
+    button_3:
+      name: Config button pressed
+      description: "Action to run when config button is pressed once."
+      default: []
+      selector:
+        action:
+    ## Held
+    button_1_hold:
+      name: Down paddle held
+      description: "Action to run when down paddle is held."
+      default: []
+      selector:
+        action:
+    button_2_hold:
+      name: Up paddle held
+      description: "Action to run when up paddle is held."
+      default: []
+      selector:
+        action:
+    button_3_hold:
+      name: Config button held
+      description: "Action to run when config button is held."
+      default: []
+      selector:
+        action:
+    ## Released
+    button_1_release:
+      name: Down paddle released
+      description: "Action to run when down paddle is released."
+      default: []
+      selector:
+        action:
+    button_2_release:
+      name: Up paddle released
+      description: "Action to run when up paddle is released."
+      default: []
+      selector:
+        action:
+    button_3_release:
+      name: Config button released
+      description: "Action to run when config button is released."
+      default: []
+      selector:
+        action:
+    ## Pressed Twice
+    button_1_double:
+      name: Down paddle pressed twice
+      description: "Action to run when down paddle is pressed twice."
+      default: []
+      selector:
+        action:
+    button_2_double:
+      name: Up paddle pressed twice
+      description: "Action to run when up paddle is pressed twice."
+      default: []
+      selector:
+        action:
+    button_3_double:
+      name: Config button pressed twice
+      description: "Action to run when config button is pressed twice."
+      default: []
+      selector:
+        action:
+    ## Pressed Thrice
+    button_1_triple:
+      name: Down paddle pressed three times
+      description: "Action to run when down paddle is pressed three times."
+      default: []
+      selector:
+        action:
+    button_2_triple:
+      name: Up paddle pressed three times
+      description: "Action to run when up paddle is pressed three times."
+      default: []
+      selector:
+        action:
+    button_3_triple:
+      name: Config button pressed three times
+      description: "Action to run when config button is pressed three times."
+      default: []
+      selector:
+        action:
+    ## Pressed Four Times
+    button_1_quadruple:
+      name: Down paddle pressed four times
+      description: "Action to run when down paddle is pressed four times."
+      default: []
+      selector:
+        action:
+    button_2_quadruple:
+      name: Up paddle pressed four times
+      description: "Action to run when up paddle is pressed four times."
+      default: []
+      selector:
+        action:
+    button_3_quadruple:
+      name: Config button pressed four times
+      description: "Action to run when config button is pressed four times."
+      default: []
+      selector:
+        action:
+    ## Pressed Five Times
+    button_1_quintuple:
+      name: Down paddle pressed five times
+      description: "Action to run when down paddle is pressed five times."
+      default: []
+      selector:
+        action:
+    button_2_quintuple:
+      name: Up paddle pressed five times
+      description: "Action to run when up paddle is pressed five times."
+      default: []
+      selector:
+        action:
+    button_3_quintuple:
+      name: Config button pressed five times
+      description: "Action to run when config button is pressed five times."
+      default: []
+      selector:
+        action:
+    switch_on:
+      name: When the switch is turned on
+      description: "Action to run when the switch is turned on reguardless of paddle presses."
+      default: []
+      selector:
+        action:
+    switch_off:
+      name: When the switch is turned off
+      description: "Action to run when the switch is turned off reguardless of paddle presses."
+      default: []
+      selector:
+        action:
+mode: single
+max_exceeded: silent
+variables:
+  device_id: !input "inovelli_switch"
+trigger:
+  - platform: event
+    event_type: zha_event
+condition: "{{ trigger.event.data.device_id == device_id }}"
+action:
+  - variables:
+      command: '{{ trigger.event.data.command }}'
+  - service: "logbook.log"
+    data:
+      name: 'ZHA'
+      message: 'received event: {{ command }}'
+  - choose:
+      ### Button 1 (Down Paddle)
+      - conditions: "{{ command == 'button_1_press' }}"
+        sequence: !input button_1
+      - conditions: "{{ command == 'button_1_hold' }}"
+        sequence: !input button_1_hold
+      - conditions: "{{ command == 'button_1_release' }}"
+        sequence: !input button_1_release
+      - conditions: "{{ command == 'button_1_double' }}"
+        sequence: !input button_1_double
+      - conditions: "{{ command == 'button_1_triple' }}"
+        sequence: !input button_1_triple
+      - conditions: "{{ command == 'button_1_quadruple' }}"
+        sequence: !input button_1_quadruple
+      - conditions: "{{ command == 'button_1_quintuple' }}"
+        sequence: !input button_1_quintuple
+      ### Button 2 (Upper Paddle)
+      - conditions: "{{ command == 'button_2_press' }}"
+        sequence: !input button_2
+      - conditions: "{{ command == 'button_2_hold' }}"
+        sequence: !input button_2_hold
+      - conditions: "{{ command == 'button_2_release' }}"
+        sequence: !input button_2_release
+      - conditions: "{{ command == 'button_2_double' }}"
+        sequence: !input button_2_double
+      - conditions: "{{ command == 'button_2_triple' }}"
+        sequence: !input button_2_triple
+      - conditions: "{{ command == 'button_2_quadruple' }}"
+        sequence: !input button_2_quadruple
+      - conditions: "{{ command == 'button_2_quintuple' }}"
+        sequence: !input button_2_quintuple
+      ### Button 3 (Config Button)
+      - conditions: "{{ command == 'button_3_press' }}"
+        sequence: !input button_3
+      - conditions: "{{ command == 'button_3_hold' }}"
+        sequence: !input button_3_hold
+      - conditions: "{{ command == 'button_3_release' }}"
+        sequence: !input button_3_release
+      - conditions: "{{ command == 'button_3_double' }}"
+        sequence: !input button_3_double
+      - conditions: "{{ command == 'button_3_triple' }}"
+        sequence: !input button_3_triple
+      - conditions: "{{ command == 'button_3_quadruple' }}"
+        sequence: !input button_3_quadruple
+      - conditions: "{{ command == 'button_3_quintuple' }}"
+        sequence: !input button_3_quintuple
+      - conditions: "{{ command == 'on' }}"
+        sequence: !input switch_on
+      - conditions: "{{ command == 'off' }}"
+        sequence: !input switch_off
